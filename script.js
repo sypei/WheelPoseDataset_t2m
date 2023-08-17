@@ -1,15 +1,23 @@
 const figures = [];
 
-for (let i = 0; i < 100; i++) {
-    const figure = {
-        number: i,
-        filename: `${i}.gif`,
-        alt: `Figure ${i}`
-    };
-    figures.push(figure);
-}
+const descriptionPath = `datasetA-t2m/prompts.txt`;
 
-const figureContainer = document.getElementById("figureContainer");
+// Fetch the file content using the fetch API
+fetch(descriptionPath)
+  .then(response => response.text())
+  .then(text => {
+    // Split the text content into lines
+    const lines = text.split('\n');
+    for (let i = 0; i < 100; i++) {
+        const figure = {
+            number: i,
+            filename: `${i}.gif`,
+            alt: `Figure ${i}`,
+            description: `${lines[i]}`
+        };
+        figures.push(figure);
+    }
+  });
 
 const form = document.getElementById("surveyForm");
 
@@ -19,21 +27,25 @@ figures.forEach(figure => {
     const formGroup = document.createElement("div");
     formGroup.classList.add("form-group");
 
-    const label = document.createElement("label");
-    label.textContent = `Do you approve of ${figure}?`;
-
     const figureDiv = document.createElement("div");
     figureDiv.className = "figure";
 
     const figureNumber = document.createElement("h2");
     figureNumber.textContent = `Figure ${figure.number}`;
 
+    const figureDescription = document.createElement("h2");
+    figureDescription.textContent = `${figure.description}`;
+
     const figureImage = document.createElement("img");
     figureImage.src = `datasetA-t2m/${figure.filename}`;
     figureImage.alt = figure.alt;
 
     figureDiv.appendChild(figureNumber);
+    figureDiv.appendChild(figureDescription);
     figureDiv.appendChild(figureImage);
+
+    const label = document.createElement("label");
+    label.textContent = `Are you able to do this motion in your real life ${figure}?`;
     const yesInput = document.createElement("input");
     yesInput.type = "radio";
     yesInput.name = figure;
@@ -46,8 +58,8 @@ figures.forEach(figure => {
     noInput.value = "no";
     noInput.required = true;
 
+    formGroup.appendChild(figureDiv);
     formGroup.appendChild(label);
-    figureContainer.appendChild(figureDiv);
     formGroup.appendChild(yesInput);
     formGroup.appendChild(document.createTextNode("Yes"));
     formGroup.appendChild(noInput);
