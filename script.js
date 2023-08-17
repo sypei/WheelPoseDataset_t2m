@@ -132,12 +132,25 @@ saveButton.addEventListener("click", () => {
 });
 
 function saveAnswers() {
+    const difficultyRadio = document.querySelector(`input[name="difficulty-${currentIndex}"]:checked`);
+    const difficultyAns = difficultyRadio?difficultyRadio.value:0;
+    const frequencyRadio = document.querySelector(`input[name="frequency-${currentIndex}"]:checked`);
+    const frequencyAns = frequencyRadio?frequencyRadio.value:0;
+    answers[`d-${currentIndex}`] = difficultyAns;
+    answers[`f-${currentIndex}`] = frequencyAns;
     // Display saved answers in the console
     console.log("Answers:", answers);
 }
 
 submitButton.addEventListener("click", function(event) {
     event.preventDefault();
+    // record the current page
+    const difficultyRadio = document.querySelector(`input[name="difficulty-${currentIndex}"]:checked`);
+    const difficultyAns = difficultyRadio?difficultyRadio.value:0;
+    const frequencyRadio = document.querySelector(`input[name="frequency-${currentIndex}"]:checked`);
+    const frequencyAns = frequencyRadio?frequencyRadio.value:0;
+    answers[`d-${currentIndex}`] = difficultyAns;
+    answers[`f-${currentIndex}`] = frequencyAns;
 
     // Convert responses to CSV format
     const csvData = Object.entries(answers).map(([figure, response]) => `${figure},${response}`).join("\n");
