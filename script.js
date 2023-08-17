@@ -2,78 +2,118 @@ const figures = [];
 
 const descriptionPath = `datasetA-t2m/prompts.txt`;
 
-// Fetch the file content using the fetch API
-fetch(descriptionPath)
-  .then(response => response.text())
-  .then(text => {
-    // Split the text content into lines
-    const lines = text.split('\n');
-    for (let i = 0; i < 100; i++) {
-        const figure = {
-            number: i,
-            filename: `${i}.gif`,
-            alt: `Figure ${i}`,
-            description: `${lines[i]}`
-        };
-        figures.push(figure);
-    }
-  });
+// // Fetch the file content using the fetch API (Fetch is blocked by CORS if tested locally)
+// fetch(descriptionPath)
+//   .then(response => response.text())
+//   .then(text => {
+//     // Split the text content into lines
+//     const lines = text.split('\n');
+//     for (let i = 0; i < 100; i++) {
+//         const figure = {
+//             number: i,
+//             filename: `${i}.gif`,
+//             alt: `Figure ${i}`,
+//             description: `${lines[i]}`
+//         };
+//         figures.push(figure);
+//     }
+//   });
+
+for (let i = 0; i < 100; i++) {
+    const figure = {
+        number: i,
+        filename: `${i}.gif`,
+        alt: `Figure ${i}`,
+    };
+    figures.push(figure);
+}
 
 const form = document.getElementById("surveyForm");
+const prevButton = document.getElementById("prevButton");
+const nextButton = document.getElementById("nextButton");
+const submitButton = document.getElementById("submitButton");
 
 const responses = {}; // Store responses in this object
 
-figures.forEach(figure => {
-    const formGroup = document.createElement("div");
-    formGroup.classList.add("form-group");
+let currentIndex = 0;
+
+function showFigure(index) {
+    form.innerHTML = ""; // Clear the container
 
     const figureDiv = document.createElement("div");
     figureDiv.className = "figure";
 
     const figureNumber = document.createElement("h2");
-    figureNumber.textContent = `Figure ${figure.number}`;
-
-    const figureDescription = document.createElement("h2");
-    figureDescription.textContent = `${figure.description}`;
+    figureNumber.textContent = `Figure ${index}`;
 
     const figureImage = document.createElement("img");
-    figureImage.src = `datasetA-t2m/${figure.filename}`;
-    figureImage.alt = figure.alt;
+    figureImage.src = `datasetA-t2m/${index}.gif`; // Adjust the image path
+    figureImage.alt = `Figure ${index}`;
 
     figureDiv.appendChild(figureNumber);
-    figureDiv.appendChild(figureDescription);
     figureDiv.appendChild(figureImage);
 
-    const label = document.createElement("label");
-    label.textContent = `Are you able to do this motion in your real life ${figure}?`;
-    const yesInput = document.createElement("input");
-    yesInput.type = "radio";
-    yesInput.name = figure;
-    yesInput.value = "yes";
-    yesInput.required = true;
 
-    const noInput = document.createElement("input");
-    noInput.type = "radio";
-    noInput.name = figure;
-    noInput.value = "no";
-    noInput.required = true;
+    // 5 point likert scale
+    // ability
+    const abilitylabel = document.createElement("label");
+    abilitylabel.textContent = `Please rate your ability to do this motion in real life.`;
+    const abilityDiv = document.createElement("div");
 
-    formGroup.appendChild(figureDiv);
-    formGroup.appendChild(label);
-    formGroup.appendChild(yesInput);
-    formGroup.appendChild(document.createTextNode("Yes"));
-    formGroup.appendChild(noInput);
-    formGroup.appendChild(document.createTextNode("No"));
+    abilityDiv.appendChild(document.createTextNode("No difficulty"));
+    for (let i = 1; i <= 5; i++) {
+        const Input = document.createElement("input");
+        Input.type = "radio";
+        Input.name = "ability";
+        Input.value = `${i}`;
+        Input.required = true;
+        abilityDiv.appendChild(Input);
+    }
+    abilityDiv.appendChild(document.createTextNode("Unable"));
+    
+    // freqency
+    const frequencylabel = document.createElement("label");
+    frequencylabel.textContent = `How frequently do you do this motion in your real life?`;
+    const frequencyDiv = document.createElement("div");
 
-    form.appendChild(formGroup);
+    frequencyDiv.appendChild(document.createTextNode("Every day"));
+    for (let i = 1; i <= 5; i++) {
+        const Input = document.createElement("input");
+        Input.type = "radio";
+        Input.name = "frequency";
+        Input.value = `${i}`;
+        Input.required = true;
+        frequencyDiv.appendChild(Input);
+    }
+    frequencyDiv.appendChild(document.createTextNode("Never"));
+
+    form.appendChild(figureDiv);
+    form.appendChild(abilitylabel);
+    form.appendChild(abilityDiv);
+    
+    form.appendChild(frequencylabel);
+    form.appendChild(frequencyDiv);
+    
+}
+
+prevButton.addEventListener("click", () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showFigure(currentIndex);
+    }
 });
 
-const submitButton = document.createElement("button");
-submitButton.type = "submit";
-submitButton.textContent = "Submit";
-form.appendChild(submitButton);
+nextButton.addEventListener("click", () => {
+    if (currentIndex < figures.length - 1) {
+        currentIndex++;
+        showFigure(currentIndex);
+    }
+});
 
-form.addEventListener("submit", function(event) {
+// Initialize the first figure
+showFigure(currentIndex);
+
+submitButton.addEventListener("click", function(event) {
     event.preventDefault();
 
     const formData = new FormData(form);
@@ -93,4 +133,14 @@ form.addEventListener("submit", function(event) {
     downloadLink.href = URL.createObjectURL(blob);
     downloadLink.download = "survey_responses.csv";
     downloadLink.click();
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "ArrowLeft") {
+        // Left arrow key: Simulate click on "Prev" button
+        prevButton.click();
+    } else if (event.key === "ArrowRight" || event.key === "Enter" ) {
+        // Right arrow key: Simulate click on "Next" button
+        nextButton.click();
+    }
 });
