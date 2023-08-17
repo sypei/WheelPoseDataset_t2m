@@ -1,4 +1,5 @@
 const figures = [];
+const answers = {};
 
 const descriptionPath = `datasetA-t2m/prompts.txt`;
 
@@ -30,6 +31,7 @@ for (let i = 0; i < 100; i++) {
 
 const form = document.getElementById("surveyForm");
 const prevButton = document.getElementById("prevButton");
+const saveButton = document.getElementById("saveButton");
 const nextButton = document.getElementById("nextButton");
 const submitButton = document.getElementById("submitButton");
 
@@ -55,21 +57,21 @@ function showFigure(index) {
 
 
     // 5 point likert scale
-    // ability
-    const abilitylabel = document.createElement("label");
-    abilitylabel.textContent = `Please rate your ability to do this motion in real life.`;
-    const abilityDiv = document.createElement("div");
+    // difficulty
+    const difficultylabel = document.createElement("label");
+    difficultylabel.textContent = `Please rate the difficulty to do this motion in real life.`;
+    const difficultyDiv = document.createElement("div");
 
-    abilityDiv.appendChild(document.createTextNode("No difficulty"));
+    difficultyDiv.appendChild(document.createTextNode("No difficulty"));
     for (let i = 1; i <= 5; i++) {
         const Input = document.createElement("input");
         Input.type = "radio";
-        Input.name = "ability";
+        Input.name = `difficulty-${index}`;
         Input.value = `${i}`;
         Input.required = true;
-        abilityDiv.appendChild(Input);
+        difficultyDiv.appendChild(Input);
     }
-    abilityDiv.appendChild(document.createTextNode("Unable"));
+    difficultyDiv.appendChild(document.createTextNode("Unable"));
     
     // freqency
     const frequencylabel = document.createElement("label");
@@ -80,7 +82,7 @@ function showFigure(index) {
     for (let i = 1; i <= 5; i++) {
         const Input = document.createElement("input");
         Input.type = "radio";
-        Input.name = "frequency";
+        Input.name = `frequency-${index}`;
         Input.value = `${i}`;
         Input.required = true;
         frequencyDiv.appendChild(Input);
@@ -88,8 +90,8 @@ function showFigure(index) {
     frequencyDiv.appendChild(document.createTextNode("Never"));
 
     form.appendChild(figureDiv);
-    form.appendChild(abilitylabel);
-    form.appendChild(abilityDiv);
+    form.appendChild(difficultylabel);
+    form.appendChild(difficultyDiv);
     
     form.appendChild(frequencylabel);
     form.appendChild(frequencyDiv);
@@ -97,6 +99,12 @@ function showFigure(index) {
 }
 
 prevButton.addEventListener("click", () => {
+    const difficultyRadio = document.querySelector(`input[name="difficulty-${currentIndex}"]:checked`);
+    const difficultyAns = difficultyRadio?difficultyRadio.value:0;
+    const frequencyRadio = document.querySelector(`input[name="frequency-${currentIndex}"]:checked`);
+    const frequencyAns = frequencyRadio?frequencyRadio.value:0;
+    answers[`d-${currentIndex}`] = difficultyAns;
+    answers[`f-${currentIndex}`] = frequencyAns;
     if (currentIndex > 0) {
         currentIndex--;
         showFigure(currentIndex);
@@ -104,6 +112,12 @@ prevButton.addEventListener("click", () => {
 });
 
 nextButton.addEventListener("click", () => {
+    const difficultyRadio = document.querySelector(`input[name="difficulty-${currentIndex}"]:checked`);
+    const difficultyAns = difficultyRadio?difficultyRadio.value:0;
+    const frequencyRadio = document.querySelector(`input[name="frequency-${currentIndex}"]:checked`);
+    const frequencyAns = frequencyRadio?frequencyRadio.value:0;
+    answers[`d-${currentIndex}`] = difficultyAns;
+    answers[`f-${currentIndex}`] = frequencyAns;
     if (currentIndex < figures.length - 1) {
         currentIndex++;
         showFigure(currentIndex);
@@ -113,17 +127,20 @@ nextButton.addEventListener("click", () => {
 // Initialize the first figure
 showFigure(currentIndex);
 
+saveButton.addEventListener("click", () => {
+    saveAnswers();
+});
+
+function saveAnswers() {
+    // Display saved answers in the console
+    console.log("Answers:", answers);
+}
+
 submitButton.addEventListener("click", function(event) {
     event.preventDefault();
 
-    const formData = new FormData(form);
-
-    for (const [name, value] of formData.entries()) {
-        responses[name] = value;
-    }
-
     // Convert responses to CSV format
-    const csvData = Object.entries(responses).map(([figure, response]) => `${figure},${response}`).join("\n");
+    const csvData = Object.entries(answers).map(([figure, response]) => `${figure},${response}`).join("\n");
 
     // Create a Blob containing the CSV data
     const blob = new Blob([csvData], { type: "text/csv" });
