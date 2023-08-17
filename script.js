@@ -1,6 +1,13 @@
-const figures = ["Figure 1", "Figure 2", "Figure 3"]; // Add more figures as needed
+const figures = [
+    { name: "Figure 1", imageUrl: "datasetA-t2m/0.gif" },
+    { name: "Figure 2", imageUrl: "datasetA-t2m/1.gif" },
+    { name: "Figure 3", imageUrl: "datasetA-t2m/2.gif" }
+    // Add more figures as needed
+];
 
 const form = document.getElementById("surveyForm");
+
+const responses = {}; // Store responses in this object
 
 figures.forEach(figure => {
     const formGroup = document.createElement("div");
@@ -8,6 +15,14 @@ figures.forEach(figure => {
 
     const label = document.createElement("label");
     label.textContent = `Do you approve of ${figure}?`;
+
+    const figureContainer = document.createElement("div");
+    figureContainer.classList.add("figure-container");
+
+    const figureImage = document.createElement("img");
+    figureImage.src = figure.imageUrl;
+    figureImage.alt = figure.name;
+    figureImage.classList.add("figure-image");
 
     const yesInput = document.createElement("input");
     yesInput.type = "radio";
@@ -22,6 +37,8 @@ figures.forEach(figure => {
     noInput.required = true;
 
     formGroup.appendChild(label);
+    formGroup.appendChild(figureContainer);
+    figureContainer.appendChild(figureImage);
     formGroup.appendChild(yesInput);
     formGroup.appendChild(document.createTextNode("Yes"));
     formGroup.appendChild(noInput);
@@ -39,12 +56,20 @@ form.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const formData = new FormData(form);
-    const responses = {};
 
     for (const [name, value] of formData.entries()) {
         responses[name] = value;
     }
 
-    // You can now send the responses to a server or perform any other actions
-    console.log("Recorded responses:", responses);
+    // Convert responses to CSV format
+    const csvData = Object.entries(responses).map(([figure, response]) => `${figure},${response}`).join("\n");
+
+    // Create a Blob containing the CSV data
+    const blob = new Blob([csvData], { type: "text/csv" });
+
+    // Create a download link for the CSV file
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = "survey_responses.csv";
+    downloadLink.click();
 });
