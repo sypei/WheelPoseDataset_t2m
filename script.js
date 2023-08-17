@@ -59,7 +59,7 @@ function showFigure(index) {
     // 5 point likert scale
     // difficulty
     const difficultylabel = document.createElement("label");
-    difficultylabel.textContent = `Please rate the difficulty to do this motion in real life.`;
+    difficultylabel.textContent = `How difficult is it for you to do this motion in real life?`;
     const difficultyDiv = document.createElement("div");
 
     difficultyDiv.appendChild(document.createTextNode("No difficulty"));
