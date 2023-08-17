@@ -1,9 +1,15 @@
-const figures = [
-    { name: "Figure 1", imageUrl: "datasetA-t2m/0.gif" },
-    { name: "Figure 2", imageUrl: "datasetA-t2m/1.gif" },
-    { name: "Figure 3", imageUrl: "datasetA-t2m/2.gif" }
-    // Add more figures as needed
-];
+const figures = [];
+
+for (let i = 0; i < 100; i++) {
+    const figure = {
+        number: i,
+        filename: `${i}.gif`,
+        alt: `Figure ${i}`
+    };
+    figures.push(figure);
+}
+
+const figureContainer = document.getElementById("figureContainer");
 
 const form = document.getElementById("surveyForm");
 
@@ -16,14 +22,18 @@ figures.forEach(figure => {
     const label = document.createElement("label");
     label.textContent = `Do you approve of ${figure}?`;
 
-    const figureContainer = document.createElement("div");
-    figureContainer.classList.add("figure-container");
+    const figureDiv = document.createElement("div");
+    figureDiv.className = "figure";
+
+    const figureNumber = document.createElement("h2");
+    figureNumber.textContent = `Figure ${figure.number}`;
 
     const figureImage = document.createElement("img");
-    figureImage.src = figure.imageUrl;
-    figureImage.alt = figure.name;
-    figureImage.classList.add("figure-image");
+    figureImage.src = `datasetA-t2m/${figure.filename}`;
+    figureImage.alt = figure.alt;
 
+    figureDiv.appendChild(figureNumber);
+    figureDiv.appendChild(figureImage);
     const yesInput = document.createElement("input");
     yesInput.type = "radio";
     yesInput.name = figure;
@@ -37,8 +47,7 @@ figures.forEach(figure => {
     noInput.required = true;
 
     formGroup.appendChild(label);
-    formGroup.appendChild(figureContainer);
-    figureContainer.appendChild(figureImage);
+    figureContainer.appendChild(figureDiv);
     formGroup.appendChild(yesInput);
     formGroup.appendChild(document.createTextNode("Yes"));
     formGroup.appendChild(noInput);
