@@ -1,7 +1,7 @@
 const figures = [];
 const answers = {};
 
-const descriptionPath = `datasetA-t2m/prompts.txt`;
+const descriptionPath = `dataset_t2m/prompts.txt`;
 
 // // Fetch the file content using the fetch API (Fetch is blocked by CORS if tested locally)
 // fetch(descriptionPath)
@@ -49,7 +49,7 @@ function showFigure(index) {
     figureNumber.textContent = `Figure ${index}`;
 
     const figureImage = document.createElement("img");
-    figureImage.src = `datasetA-t2m/${index}.gif`; // Adjust the image path
+    figureImage.src = `dataset_t2m/${index}.gif`; // Adjust the image path
     figureImage.alt = `Figure ${index}`;
 
     figureDiv.appendChild(figureNumber);
