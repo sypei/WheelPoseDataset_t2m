@@ -5,7 +5,7 @@ var lines = [];
 const figuresCount = 100;
 // LoadFile will be blocked by CORS if tested locally)
 const descriptionPath = `dataset_t2m/prompts.txt`;
-LoadFile();//
+// LoadFile();//
 
 const form = document.getElementById("surveyForm");
 const prevButton = document.getElementById("prevButton");
@@ -27,8 +27,8 @@ function showFigure(index) {
     figureDiv.className = "figure";
 
     const figureNumber = document.createElement("h2");
-    figureNumber.textContent = `Figure ${index+1}:  `+lines[index];
-    // figureNumber.textContent = `Figure ${index+1}  `;
+    // figureNumber.textContent = `Figure ${index+1}:  `+lines[index];
+    figureNumber.textContent = `Figure ${index+1}  `;
 
     const figureImage = document.createElement("img");
     figureImage.src = `dataset_t2m/${index}.gif`; // Adjust the image path
