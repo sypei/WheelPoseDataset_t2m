@@ -1,18 +1,11 @@
-const figures = [];
 const answers = {};
-const lines = [];
+var lines = [];
+
+
 const figuresCount = 100;
-// Fetch the file content using the fetch API (Fetch is blocked by CORS if tested locally)
+// LoadFile will be blocked by CORS if tested locally)
 const descriptionPath = `dataset_t2m/prompts.txt`;
-
-fetch(descriptionPath)
-  .then(response => response.text())
-  .then(text => {
-    // Split the text content into lines
-    lines = text.split('\n');
-
-  });
-
+LoadFile();//
 
 const form = document.getElementById("surveyForm");
 const prevButton = document.getElementById("prevButton");
@@ -33,9 +26,9 @@ function showFigure(index) {
     const figureDiv = document.createElement("div");
     figureDiv.className = "figure";
 
-    // const figureNumber = document.createElement("h2");
-    figureNumber.textContent = `Figure ${index}  `+lines[index];
-    figureNumber.textContent = `Figure ${index+1}  `;
+    const figureNumber = document.createElement("h2");
+    figureNumber.textContent = `Figure ${index+1}:  `+lines[index];
+    // figureNumber.textContent = `Figure ${index+1}  `;
 
     const figureImage = document.createElement("img");
     figureImage.src = `dataset_t2m/${index}.gif`; // Adjust the image path
@@ -177,6 +170,18 @@ function saveAnswers() {
     answers[`f-${currentIndex}`] = frequencyAns;
     answers[`i-${currentIndex}`] = IEAns;
 }
+
+function LoadFile() {
+    var result = null;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", descriptionPath, false);
+    xmlhttp.send();
+    if (xmlhttp.status==200) {
+        result = xmlhttp.responseText;
+        lines = result.split('\n');
+    }
+}
+
 
 submitButton.addEventListener("click", function(event) {
     event.preventDefault();
