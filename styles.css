@@ -20,7 +20,7 @@
 
 
 .figure img {
-    max-width: 90%; /* Adjust image width as needed */
+    max-width: 80%; /* Adjust image width as needed */
     height: auto;
 }
 
@@ -59,7 +59,7 @@ body {
 
 button {
     display: block;
-    margin-top: -20px;
+    margin-top: -10px;
     margin-left: 20px;
     font-size: 35px;
 }
