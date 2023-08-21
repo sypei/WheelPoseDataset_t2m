@@ -8,17 +8,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>Evaluating Realism of Synthetic Dataset (Text2Motion)</h1>
-        <p>Please try to focus on the range of motion, and ignore the glitches of animation.</p>
-        <form id="surveyForm">
+    <div class="title"><h2>Evaluating Realism of Synthetic Dataset (Text2Motion)</h2><h2 id="warning">Don't close the tab before you finish and submit.</h2></div>
+        <div id="surveyForm">
             <!-- Figures will be added dynamically using JavaScript -->
-        </form>
+        </div>
     </div>
     <div class="navigation">
         <button id="prevButton">Prev</button>
         <button id="saveButton">Save</button>
-        <button id="nextButton">Next</button>
         <button id="submitButton">Submit</button>
+        <button id="nextButton">Next</button>
+    </div>
+    <div class="instructions">
+        <h3>Please try to focus on the range of motion, and ignore the glitches of animation.</p>
+        <h3>Instructions: Answer three questions for each figure. After finishing all 100 figures, click "submit" to download your answers (a file named "survey_responses_mocap.csv"), and upload it to the google form.</p>
+        <h3>Tips: You can use left/right arrow keys to browse go to previous/next image. </p>
     </div>
     <script src="script.js"></script>
 </body>
