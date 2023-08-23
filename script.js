@@ -60,6 +60,13 @@ function showFigure(index) {
         Input.type = "radio";
         Input.name = `difficulty-${index}`;
         Input.value = `${i}`;
+        if (answers[`d-${index}`])
+        {
+            if (Input.value == answers[`d-${index}`])
+            {
+                Input.checked = "checked";
+            }
+        }
         Input.required = true;
         const radioItem = document.createElement("div");
         radioItem.className = "radio-item"
@@ -88,6 +95,13 @@ function showFigure(index) {
         Input.type = "radio";
         Input.name = `frequency-${index}`;
         Input.value = `${i}`;
+        if (answers[`f-${index}`])
+        {
+            if (Input.value == answers[`f-${index}`])
+            {
+                Input.checked = "checked";
+            }
+        }
         Input.required = true;
         const radioItem = document.createElement("div");
         radioItem.className = "radio-item"
@@ -106,6 +120,13 @@ function showFigure(index) {
     yesInput.type = "radio";
     yesInput.name = `IE-${index}`;
     yesInput.value = `1`;
+    if (answers[`i-${index}`])
+    {
+        if (yesInput.value == answers[`i-${index}`])
+        {
+            yesInput.checked = "checked";
+        }
+    } 
     yesInput.required = true;
     IEDiv.appendChild(yesInput);
     IEDiv.appendChild(document.createTextNode("Yes"));
@@ -113,7 +134,14 @@ function showFigure(index) {
     const noInput = document.createElement("input");
     noInput.type = "radio";
     noInput.name = `IE-${index}`;
-    noInput.value = `0`;
+    noInput.value = `2`;
+    if (answers[`i-${index}`])
+    {
+        if (noInput.value == answers[`i-${index}`])
+        {
+            noInput.checked = "checked";
+        }
+    } 
     noInput.required = true;
     IEDiv.appendChild(noInput);
     IEDiv.appendChild(document.createTextNode("No"));
